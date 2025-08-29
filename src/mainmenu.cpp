@@ -8,7 +8,7 @@ public: // Constructer + Destructer
 
 	MainMenu() { // Initialise Window
 
-		SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
+		SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
 		InitWindow( m_WindowSize.x , m_WindowSize.y , "Drift");
 

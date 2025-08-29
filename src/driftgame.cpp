@@ -7,6 +7,8 @@ public:
 	
 	DriftGame() {
 		LoadTextures();
+
+		m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - ( m_Scissors.height / 2) * .6f };
 	}
 
 	~DriftGame() {
@@ -22,9 +24,18 @@ public:
 		UpdateSine();
 
 		DrawPlayer();
+
+		DrawScissors();
 	}
 
 private:
+
+	void DrawScissors() {
+
+		m_ScissorsPos.x -= GetFrameTime() * m_ScissorsScrollSpeed;
+
+		DrawTextureEx(m_Scissors, m_ScissorsPos , 0 , .6f ,WHITE);
+	}
 
 	void DrawPlayer() {
 
@@ -76,4 +87,6 @@ private:
 	float sine = 0;
 	bool m_SineUp = true;
 
+	Vector2 m_ScissorsPos{};
+	const int m_ScissorsScrollSpeed = 300;
 };

@@ -1,11 +1,11 @@
 #include "mainmenu.cpp"
 #include "driftgame.cpp"
 
-int main ()
+int main()
 {
 	MainMenu menu;
 	DriftGame game;
-	
+
 	while (!WindowShouldClose())
 	{
 		BeginDrawing();
