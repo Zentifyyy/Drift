@@ -39,9 +39,21 @@ private:
 
 	void DrawPlayer() {
 
+		// Swaying
 		m_PlayerRot += sine / 2;
 		m_PlayerPos.y += sine / 4;
 
+		// Gravity
+		dy += m_Gravity * GetFrameTime();
+
+		// Jump
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE)) {
+			dy = -m_Gravity;
+		}
+		
+		m_PlayerPos.y += dy;
+
+		// Draw Player
 		DrawTextureEx (m_PlayerCharacter , m_PlayerPos , m_PlayerRot , .1f , WHITE);
 	}
 
@@ -84,9 +96,13 @@ private:
 	Vector2 m_PlayerPos{ 100 , (float)GetScreenHeight() / 2};
 	float m_PlayerRot = -10;
 
+	float dy = 0;
+
 	float sine = 0;
 	bool m_SineUp = true;
 
 	Vector2 m_ScissorsPos{};
 	const int m_ScissorsScrollSpeed = 300;
+
+	float m_Gravity = 2.5f;
 };
