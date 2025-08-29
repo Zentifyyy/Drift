@@ -10,7 +10,7 @@ int main ()
 	{
 		BeginDrawing();
 
-		if (menu.IsMenuActive)
+		if (!menu.IsMenuActive)
 		{
 			menu.Update();
 		}

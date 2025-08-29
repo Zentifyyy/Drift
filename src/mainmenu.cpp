@@ -36,7 +36,7 @@ public: // Public Functions
 		DrawRectangle( rectPos.x, rectPos.y, m_ButtonSize.x , m_ButtonSize.y, WHITE );
 		DrawText("Play", (GetScreenWidth() - MeasureText("Play", 25)) / 2, (GetScreenHeight() / 2), 25, BLACK);
 	
-		if (IsMouseHoveringRect(rectPos, m_ButtonSize) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+		if (IsMouseHoveringRect(rectPos, m_ButtonSize) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 			IsMenuActive = false;
 		}
 	
@@ -44,7 +44,7 @@ public: // Public Functions
 
 private: // Private Functions
 
-	bool IsMouseHoveringRect(Vector2 rectPos, Vector2 rectSize) {
+	bool IsMouseHoveringRect(Vector2& rectPos, Vector2& rectSize) {
 
 		float rectYmax = rectPos.y + (rectSize.y / 2);
 		float rectYmin = rectPos.y - (rectSize.y / 2);
