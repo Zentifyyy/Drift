@@ -6,11 +6,12 @@ int main()
 	MainMenu menu;
 	DriftGame game;
 
-	while (!WindowShouldClose())
+	while (!menu.CloseGame)
 	{
-		BeginDrawing();
 
-		if (!menu.IsMenuActive)
+		BeginDrawing();
+		
+		if (menu.IsMenuActive)
 		{
 			menu.Update();
 		}

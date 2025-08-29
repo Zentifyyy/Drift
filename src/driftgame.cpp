@@ -104,5 +104,5 @@ private:
 	Vector2 m_ScissorsPos{};
 	const int m_ScissorsScrollSpeed = 300;
 
-	float m_Gravity = 2.5f;
+	float m_Gravity = 3.5f;
 };

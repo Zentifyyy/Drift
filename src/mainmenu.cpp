@@ -12,6 +12,10 @@ public: // Constructer + Destructer
 
 		InitWindow( m_WindowSize.x , m_WindowSize.y , "Drift");
 
+		m_PlayRectPos = { (GetScreenWidth() - m_ButtonSize.x) / 2, (float)(GetScreenHeight() / 2) - 12.5f };
+
+		m_ExitRectPos = { (GetScreenWidth() - m_ButtonSize.x) / 2, (float)(GetScreenHeight() / 2) + 25 + m_ButtonSize.y };
+
 		LoadTextures();
 	};
 
@@ -31,12 +35,18 @@ public: // Public Functions
 		DrawText("Drift", (GetScreenWidth() - MeasureText("Drift", 50)) / 2, 100, 50, WHITE);
 		DrawTextureEx(m_Glider, { (float)GetScreenWidth() / 2 + MeasureText("Drift", 50) - 50, 100}, 0, 0.2f, WHITE);
 		
-		Vector2 rectPos{ (GetScreenWidth() - m_ButtonSize.x) / 2, (GetScreenHeight() / 2) - 12.5 };
-		
-		DrawRectangle( rectPos.x, rectPos.y, m_ButtonSize.x , m_ButtonSize.y, WHITE );
+
+		DrawRectangle(m_ExitRectPos.x, m_ExitRectPos.y, m_ButtonSize.x, m_ButtonSize.y, WHITE);
+		DrawText("Exit", (GetScreenWidth() - MeasureText("Exit", 25)) / 2, (GetScreenHeight() / 2) + 90, 25, BLACK);
+
+		if (IsMouseHoveringRect(m_ExitRectPos, m_ButtonSize) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || WindowShouldClose()) {
+			CloseGame = true;
+		}
+
+		DrawRectangle( m_PlayRectPos.x, m_PlayRectPos.y, m_ButtonSize.x , m_ButtonSize.y, WHITE );
 		DrawText("Play", (GetScreenWidth() - MeasureText("Play", 25)) / 2, (GetScreenHeight() / 2), 25, BLACK);
 	
-		if (IsMouseHoveringRect(rectPos, m_ButtonSize) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+		if (IsMouseHoveringRect(m_PlayRectPos, m_ButtonSize) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 			IsMenuActive = false;
 		}
 	
@@ -84,6 +94,7 @@ private: // Private Functions
 public:
 
 	bool IsMenuActive = true;
+	bool CloseGame = false;
 
 private: // Private Variables
 
@@ -92,5 +103,7 @@ private: // Private Variables
 	Vector2 m_WindowSize{ 900 , 600 };
 
 	Vector2 m_ButtonSize{ 200, 50 };
-	
+
+	Vector2 m_ExitRectPos{};
+	Vector2 m_PlayRectPos{};
 };
