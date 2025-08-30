@@ -130,7 +130,6 @@ private: // Private Functions
 		{
 			return false;
 		}
-		
 	}
 	
 	void LoadTextures() {
