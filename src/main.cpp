@@ -6,8 +6,13 @@ int main()
 	MainMenu menu;
 	DriftGame game;
 
-	while (!menu.CloseGame)
+	bool closeGame = false;
+
+	while (!closeGame)
 	{
+		if (menu.CloseGame || WindowShouldClose()) {
+			closeGame = true;
+		}
 
 		BeginDrawing();
 		

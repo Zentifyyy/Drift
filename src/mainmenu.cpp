@@ -35,19 +35,36 @@ public: // Public Functions
 		DrawText("Drift", (GetScreenWidth() - MeasureText("Drift", 50)) / 2, 100, 50, WHITE);
 		DrawTextureEx(m_Glider, { (float)GetScreenWidth() / 2 + MeasureText("Drift", 50) - 50, 100}, 0, 0.2f, WHITE);
 		
-
-		DrawRectangle(m_ExitRectPos.x, m_ExitRectPos.y, m_ButtonSize.x, m_ButtonSize.y, WHITE);
+		DrawRectangle(m_ExitRectPos.x, m_ExitRectPos.y, m_ButtonSize.x, m_ButtonSize.y, m_ExitButtonCol);
 		DrawText("Exit", (GetScreenWidth() - MeasureText("Exit", 25)) / 2, (GetScreenHeight() / 2) + 90, 25, BLACK);
 
-		if (IsMouseHoveringRect(m_ExitRectPos, m_ButtonSize) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || WindowShouldClose()) {
-			CloseGame = true;
+		if (IsMouseHoveringRect(m_ExitRectPos, m_ButtonSize)) {
+			
+			m_ExitButtonCol = LIGHTGRAY;
+
+			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+				m_ExitButtonCol = GRAY;
+				CloseGame = true;
+			}
+		}
+		else {
+			m_ExitButtonCol = WHITE;
 		}
 
-		DrawRectangle( m_PlayRectPos.x, m_PlayRectPos.y, m_ButtonSize.x , m_ButtonSize.y, WHITE );
+		DrawRectangle( m_PlayRectPos.x, m_PlayRectPos.y, m_ButtonSize.x , m_ButtonSize.y, m_PlayButtonCol );
 		DrawText("Play", (GetScreenWidth() - MeasureText("Play", 25)) / 2, (GetScreenHeight() / 2), 25, BLACK);
 	
-		if (IsMouseHoveringRect(m_PlayRectPos, m_ButtonSize) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-			IsMenuActive = false;
+		if (IsMouseHoveringRect(m_PlayRectPos, m_ButtonSize)) {
+
+			m_PlayButtonCol = LIGHTGRAY;
+			
+			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+				m_PlayButtonCol = GRAY;
+				IsMenuActive = false;
+			}
+		}
+		else {
+			m_PlayButtonCol = WHITE;
 		}
 	
 	}
@@ -56,11 +73,11 @@ private: // Private Functions
 
 	bool IsMouseHoveringRect(Vector2& rectPos, Vector2& rectSize) {
 
-		float rectYmax = rectPos.y + (rectSize.y / 2);
-		float rectYmin = rectPos.y - (rectSize.y / 2);
+		float rectYmax = rectPos.y + rectSize.y;
+		float rectYmin = rectPos.y;
 
-		float rectXmax = rectPos.x + (rectSize.x / 2);
-		float rectXmin = rectPos.x - (rectSize.x / 2);
+		float rectXmax = rectPos.x + rectSize.x;
+		float rectXmin = rectPos.x;
 
 		Vector2 mousePos = GetMousePosition();
 		
@@ -106,4 +123,7 @@ private: // Private Variables
 
 	Vector2 m_ExitRectPos{};
 	Vector2 m_PlayRectPos{};
+
+	Color m_ExitButtonCol = WHITE;
+	Color m_PlayButtonCol = WHITE;
 };
