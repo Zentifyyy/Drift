@@ -32,7 +32,7 @@ private:
 
 	void DrawScissors() {
 
-		m_ScissorsPos.x -= GetFrameTime() * m_ScissorsScrollSpeed;
+		m_ScissorsPos.x += GetFrameTime() * m_ScissorsScrollSpeed;
 
 		DrawTextureEx(m_Scissors, m_ScissorsPos , 0 , .6f ,WHITE);
 	}
