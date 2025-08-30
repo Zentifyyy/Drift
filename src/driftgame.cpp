@@ -8,7 +8,17 @@ public:
 	DriftGame() {
 		LoadTextures();
 
-		m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - ( m_Scissors.height / 2) * .6f };
+		m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - ( m_Scissors.height / 2) * .75f };
+		
+		m_ScissorsPosTwo = { m_ScissorsPos.x + GetScreenWidth() / 3 + (m_Scissors.width * 0.75f) , m_ScissorsPos.y };
+	
+		m_ScissorsPosThree = { m_ScissorsPos.x + ((GetScreenWidth() / 3) + (m_Scissors.width * 0.75f)) * 2 , m_ScissorsPos.y };
+		
+		m_ScissorYOffset = GetRandomValue(-m_ScissorMaxDist , m_ScissorMaxDist);
+		
+		m_ScissorYOffsetTwo = GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
+		
+		m_ScissorYOffsetThree = GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
 	}
 
 	~DriftGame() {
@@ -27,7 +37,11 @@ public:
 
 		DrawPlayer();
 
-		DrawScissors();
+		DrawScissors(m_ScissorsPos, m_ScissorYOffset );
+
+		DrawScissors(m_ScissorsPosTwo, m_ScissorYOffsetTwo );
+
+		DrawScissors(m_ScissorsPosThree, m_ScissorYOffsetThree );
 	}
 
 private:
@@ -45,11 +59,17 @@ private:
 		DrawTexture(m_Background, m_BackgroundX + m_Background.width, 0, WHITE);
 	}
 
-	void DrawScissors() {
+	void DrawScissors(Vector2& pos, float& yOffset) {
 
-		m_ScissorsPos.x += GetFrameTime() * m_ScissorsScrollSpeed;
+		pos.x -= GetFrameTime() * m_ScissorsScrollSpeed;
 
-		DrawTextureEx(m_Scissors, m_ScissorsPos , 0 , .6f ,WHITE);
+		if (pos.x + (m_Scissors.width * 0.85f) <= 0) {
+			yOffset = GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
+			pos.x += GetScreenWidth() * 1.5f;
+		}
+
+		DrawTextureEx(m_Scissors, { pos.x,pos.y + yOffset },
+			0, 0.75f, WHITE);
 	}
 
 	void DrawPlayer() {
@@ -63,7 +83,7 @@ private:
 
 		// Jump
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE)) {
-			dy = -m_Gravity;
+			dy = -m_Gravity + 1.5f;
 		}
 		
 		m_PlayerPos.y += dy;
@@ -120,7 +140,16 @@ private:
 	bool m_SineUp = true;
 
 	Vector2 m_ScissorsPos{};
-	const int m_ScissorsScrollSpeed = 300;
+	Vector2 m_ScissorsPosTwo{};
+	Vector2 m_ScissorsPosThree{};
 
-	float m_Gravity = 3.5f;
+	float m_ScissorYOffset = 0;
+	float m_ScissorYOffsetTwo = 0;
+	float m_ScissorYOffsetThree = 0;
+
+	const int m_ScissorMaxDist = 75;
+
+	const int m_ScissorsScrollSpeed = 200;
+
+	float m_Gravity = 4.5f;
 };
