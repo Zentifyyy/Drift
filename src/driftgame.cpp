@@ -21,6 +21,8 @@ public:
 		
 		ClearBackground(SKYBLUE);
 
+		DrawBackground();
+
 		UpdateSine();
 
 		DrawPlayer();
@@ -29,6 +31,19 @@ public:
 	}
 
 private:
+
+	void DrawBackground() {
+
+		m_BackgroundX -= GetFrameTime() * 100;
+
+		if (m_BackgroundX <= -m_Background.width) {
+			m_BackgroundX = 0;
+		}
+
+		DrawTexture(m_Background , m_BackgroundX , 0 , WHITE);
+
+		DrawTexture(m_Background, m_BackgroundX + m_Background.width, 0, WHITE);
+	}
 
 	void DrawScissors() {
 
@@ -75,23 +90,26 @@ private:
 	}
 
 	void LoadTextures() {
-
 		SearchAndSetResourceDir("resources");
 
 		m_PlayerCharacter = LoadTexture("Glider.png");
-
 		m_Scissors = LoadTexture("Scissors.png");
+		m_Background = LoadTexture("Background.png");
 	}
 
 	void UnloadTextures() {
 		UnloadTexture(m_PlayerCharacter);
 		UnloadTexture(m_Scissors);
+		UnloadTexture(m_Background);
 	}
 
 private:
 
 	Texture m_PlayerCharacter;
 	Texture m_Scissors;
+	Texture m_Background;
+
+	float m_BackgroundX = 0;
 
 	Vector2 m_PlayerPos{ 100 , (float)GetScreenHeight() / 2};
 	float m_PlayerRot = -10;

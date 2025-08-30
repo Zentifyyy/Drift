@@ -32,7 +32,8 @@ public: // Public Functions
 
 	void Update() {
 
-		ClearBackground(SKYBLUE);
+		ClearBackground(WHITE);
+		DrawTexture(m_Background,0,0,WHITE);
 
 		UpdateSine();
 		
@@ -137,10 +138,13 @@ private: // Private Functions
 		SearchAndSetResourceDir("resources");
 
 		m_Glider = LoadTexture("Glider.png");
+		
+		m_Background = LoadTexture("Background.png");
 	}
 
 	void UnloadTextures() {
 		UnloadTexture(m_Glider);
+		UnloadTexture(m_Background);
 	}
 
 public:
@@ -151,6 +155,7 @@ public:
 private: // Private Variables
 
 	Texture m_Glider;
+	Texture m_Background;
 
 	Vector2 m_WindowSize{ 900 , 600 };
 
