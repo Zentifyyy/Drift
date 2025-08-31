@@ -8,10 +8,18 @@ int main()
 
 	bool closeGame = false;
 
+	SearchAndSetResourceDir("resources");
+	
+	Sound BackgroundMusic = LoadSound("BackgroundMusic.wav");
+
 	while (!closeGame)
 	{
 		if (menu.CloseGame || WindowShouldClose()) {
 			closeGame = true;
+		}
+
+		if (!IsSoundPlaying(BackgroundMusic)) {
+			PlaySound(BackgroundMusic);
 		}
 
 		BeginDrawing();
@@ -27,4 +35,6 @@ int main()
 
 		EndDrawing();
 	}
+
+	UnloadSound(BackgroundMusic);
 }
