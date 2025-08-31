@@ -8,6 +8,9 @@ class DriftGame {
 public:
 	
 	DriftGame() {
+
+		InitAudioDevice();
+
 		LoadTextures();
 
 		m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - ( m_Scissors.height / 2) * .75f };
@@ -51,6 +54,8 @@ public:
 private:
 
 	void Died() {
+
+		PlaySound(m_DeathSound);
 
 		m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - (m_Scissors.height / 2) * .75f };
 
@@ -100,8 +105,10 @@ private:
 		}
 
 		if (RectCollisionCheck({m_PlayerPos}, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, { m_ClosestScissorPos.x - 100 + m_Scissors.width *0.85f, m_ClosestScissorPos.y + (m_Scissors.height / 2) - 260 }, { m_PlayerCharacter.width * 0.1f + 4, 260 })) {
+			
 			m_Score++;
-			std::cout << m_Score << "\n";
+
+			PlaySound(m_ScorePointSound);
 		}
 	}
 
@@ -163,6 +170,7 @@ private:
 
 		// Jump
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE)) {
+			PlaySound(m_JumpSound);
 			dy = -m_Gravity + 1.5f;
 		}
 		
@@ -195,12 +203,20 @@ private:
 		m_PlayerCharacter = LoadTexture("Glider.png");
 		m_Scissors = LoadTexture("Scissors.png");
 		m_Background = LoadTexture("Background.png");
+
+		m_DeathSound = LoadSound("Died.wav");
+		m_JumpSound = LoadSound("Jump.wav");
+		m_ScorePointSound = LoadSound("ScorePoint.wav");
 	}
 
 	void UnloadTextures() {
 		UnloadTexture(m_PlayerCharacter);
 		UnloadTexture(m_Scissors);
 		UnloadTexture(m_Background);
+
+		UnloadSound(m_DeathSound);
+		UnloadSound(m_JumpSound);
+		UnloadSound(m_ScorePointSound);
 	}
 
 private:
@@ -208,6 +224,10 @@ private:
 	Texture m_PlayerCharacter;
 	Texture m_Scissors;
 	Texture m_Background;
+
+	Sound m_DeathSound;
+	Sound m_JumpSound;
+	Sound m_ScorePointSound;
 
 	float m_BackgroundX = 0;
 
