@@ -1,5 +1,5 @@
 #include "driftgame.h"
-
+#include "utils.h"
 
 DriftGame::DriftGame() {
 
@@ -29,7 +29,7 @@ void DriftGame::Update() {
 	DrawBackground();
 
 	if (!m_IsDead) {
-		UpdateSine();
+		UpdateSine(m_sine);
 
 		DrawPlayer();
 
@@ -125,22 +125,6 @@ void DriftGame::Score()
 	}
 }
 
-bool DriftGame::RectCollisionCheck(Vector2 Rect1Pos, Vector2 Rect1Size, Vector2 Rect2Pos, Vector2 Rect2Size) 
-{
-	if (Rect1Pos.x > Rect2Pos.x && Rect1Pos.x + Rect1Size.x < Rect2Pos.x + Rect2Size.x) 
-	{	
-		if (Rect1Pos.y > Rect2Pos.y && Rect1Pos.y + Rect1Size.y < Rect2Pos.y + Rect2Size.y) {
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	return false;
-}
-
 void DriftGame::DrawBackground() 
 {
 	m_BackgroundX -= GetFrameTime() * 100;
@@ -169,8 +153,8 @@ void DriftGame::DrawScissors(Vector2& pos) const
 void DriftGame::DrawPlayer() 
 {
 	// Swaying
-	m_PlayerRot += sine / 2;
-	m_PlayerPos.y += sine / 4;
+	m_PlayerRot += m_sine / 2;
+	m_PlayerPos.y += m_sine / 4;
 
 	// Gravity
 	dy += m_Gravity * GetFrameTime();
@@ -184,48 +168,6 @@ void DriftGame::DrawPlayer()
 
 	// Draw Player
 	DrawTextureEx (m_PlayerCharacter , m_PlayerPos , m_PlayerRot , .1f , WHITE);
-}
-
-void DriftGame::UpdateSine() 
-{
-	if (sine >= 1) {
-		m_SineUp = false;
-	}
-	else if (sine <= -1) {
-		m_SineUp = true;
-	}
-
-	if (m_SineUp) {
-		sine += GetFrameTime() * 3;
-	}
-	else {
-		sine -= GetFrameTime() * 3;
-	}
-}
-
-bool DriftGame::IsMouseHoveringRect(Vector2& rectPos, Vector2& rectSize) 
-{
-	float rectYmax = rectPos.y + rectSize.y;
-	float rectYmin = rectPos.y;
-
-	float rectXmax = rectPos.x + rectSize.x;
-	float rectXmin = rectPos.x;
-
-	Vector2 mousePos = GetMousePosition();
-
-	if (mousePos.y > rectYmin && mousePos.y < rectYmax) {
-
-		if (mousePos.x > rectXmin && mousePos.x < rectXmax) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
 }
 
 void DriftGame::LoadTextures() {

@@ -1,5 +1,5 @@
 #include "mainmenu.h"
-
+#include <raylib.h>
 
 MainMenu::MainMenu(Vector2 windowSize) {
 
@@ -26,7 +26,7 @@ void MainMenu::Update() {
 	ClearBackground(WHITE);
 	DrawTexture(m_Background,0,0,WHITE);
 
-	UpdateSine();
+	UpdateSine(m_Sine);
 		
 	DrawText("Drift", (GetScreenWidth() - MeasureText("Drift", 50)) / 2, 100, 50, WHITE);
 	DrawPlayer();
@@ -61,48 +61,6 @@ void MainMenu::DrawPlayer() {
 	}
 
 	DrawTextureEx( m_Glider , m_PlayerPos , m_PlayerRot , m_PlayerScale , WHITE);
-}
-
-void MainMenu::UpdateSine() {
-
-	if (m_Sine >= 1) {
-		m_SineUp = false;
-	}
-	else if (m_Sine <= -1) {
-		m_SineUp = true;
-	}
-
-	if (m_SineUp) {
-		m_Sine += GetFrameTime() * 3;
-	}
-	else {
-		m_Sine -= GetFrameTime() * 3;
-	}
-}
-
-bool MainMenu::IsMouseHoveringRect(Vector2& rectPos, Vector2& rectSize) {
-
-	float rectYmax = rectPos.y + rectSize.y;
-	float rectYmin = rectPos.y;
-
-	float rectXmax = rectPos.x + rectSize.x;
-	float rectXmin = rectPos.x;
-
-	Vector2 mousePos = GetMousePosition();
-		
-	if (mousePos.y > rectYmin && mousePos.y < rectYmax) {
-
-		if (mousePos.x > rectXmin && mousePos.x < rectXmax ) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
 }
 	
 void MainMenu::LoadTextures() {

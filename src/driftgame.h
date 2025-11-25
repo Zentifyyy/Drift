@@ -21,19 +21,13 @@ private:
 
 	void Score();
 
-	bool RectCollisionCheck(Vector2 Rect1Pos, Vector2 Rect1Size, Vector2 Rect2Pos, Vector2 Rect2Size);
-
 	void DrawBackground();
 
 	void DrawScissors(Vector2& pos) const;
 
 	void DrawPlayer();
 
-	bool IsMouseHoveringRect(Vector2& rectPos, Vector2& rectSize);
-
 	void LoadTextures();
-
-	void UpdateSine();
 
 	void UnloadTextures() const;
 
@@ -55,8 +49,7 @@ private:
 
 	float dy = 0;
 
-	float sine = 0;
-	bool m_SineUp = true;
+	float m_sine = 0;
 
 	Vector2 m_ScissorsPos{};
 	Vector2 m_ScissorsPosTwo{};

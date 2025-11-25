@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include "utils.h"
 
 class MainMenu {
 
@@ -16,10 +17,6 @@ public: // Public Functions
 private: // Private Functions
 
 	void DrawPlayer();
-
-	void UpdateSine();
-
-	bool IsMouseHoveringRect(Vector2& rectPos, Vector2& rectSize);
 
 	void LoadTextures();
 
@@ -41,12 +38,9 @@ private: // Private Variables
 	float m_PlayerRot = 0;
 	float m_PlayerScale = 0.1f;
 
-	Vector2 m_ExitRectPos{};
 	Vector2 m_PlayRectPos{};
 
-	Color m_ExitButtonCol = WHITE;
 	Color m_PlayButtonCol = WHITE;
 
 	float m_Sine = 0;
-	bool m_SineUp = true;
 };
