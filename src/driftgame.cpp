@@ -1,12 +1,7 @@
-#include <raylib.h>
-#include <iostream>
-#include <string>
+#include "driftgame.h"
 
 
-class DriftGame {
-public:
-	
-	DriftGame() {
+DriftGame::DriftGame() {
 
 		InitAudioDevice();
 
@@ -25,18 +20,17 @@ public:
 		m_ScissorsPosThree.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
 	}
 
-	~DriftGame() {
-		UnloadTextures();
-	}
+DriftGame::~DriftGame() {
+	UnloadTextures();
+}
 
-public:
+void DriftGame::Update() {
 
-	void Update() {
-		
-		ClearBackground(SKYBLUE);
+	ClearBackground(SKYBLUE);
 
-		DrawBackground();
+	DrawBackground();
 
+	if (!m_IsDead) {
 		UpdateSine();
 
 		DrawPlayer();
@@ -48,206 +42,205 @@ public:
 		DrawScissors(m_ScissorsPosThree);
 
 		Score();
-	}
 
-private:
-
-	void Died() {
-
-		PlaySound(m_DeathSound);
-
-		m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - (m_Scissors.height / 2) * .75f };
-
-		m_ScissorsPosTwo = { m_ScissorsPos.x + GetScreenWidth() / 3 + (m_Scissors.width * 0.75f) , m_ScissorsPos.y };
-
-		m_ScissorsPosThree = { m_ScissorsPos.x + ((GetScreenWidth() / 3) + (m_Scissors.width * 0.75f)) * 2 , m_ScissorsPos.y };
-
-		m_ScissorsPos.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
-
-		m_ScissorsPosTwo.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
-
-		m_ScissorsPosThree.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
-
-		m_PlayerPos = { 100 , (float)GetScreenHeight() / 2 };
-		
-		m_Score = 0;
-	}
-
-	void Score(){
-
-		DrawText(std::to_string(m_Score).c_str(), GetScreenWidth() / 2 + MeasureText(std::to_string(m_Score).c_str(), 50) / 2, 100, 50, WHITE);
-
-		// If player Out of bounds
-		if (m_PlayerPos.y <= 0 || m_PlayerPos.y >= GetScreenHeight()) {
-			Died();
-		}
-
-		// Collision for Scissors
-
-		if (m_ScissorsPos.x - m_PlayerPos.x < 100 && m_ScissorsPos.x - m_PlayerPos.x + m_Scissors.width > 0) {
-			m_ClosestScissorPos = m_ScissorsPos;
-		}
-		else if (m_ScissorsPosTwo.x - m_PlayerPos.x < 100 && m_ScissorsPosTwo.x - m_PlayerPos.x + m_Scissors.width > 0) {
-			m_ClosestScissorPos = m_ScissorsPosTwo;
-		}
-		else if (m_ScissorsPosThree.x - m_PlayerPos.x < 100 && m_ScissorsPosThree.x - m_PlayerPos.x + m_Scissors.width > 0) {
-			m_ClosestScissorPos = m_ScissorsPosThree;
-		}
-		else {
-			return;
-		}
-
-		if (RectCollisionCheck(m_PlayerPos, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, m_ClosestScissorPos, { (float)m_Scissors.width * 0.85f , ((m_Scissors.height * 0.85f) / 2) - 160 })
-			|| RectCollisionCheck(m_PlayerPos, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, { m_ClosestScissorPos.x, m_ClosestScissorPos.y + m_Scissors.height / 2 - 30 }, { (float)m_Scissors.width * 0.85f , ((m_Scissors.height * 0.85f) / 2) }))
+		if (IsKeyPressed(KEY_ESCAPE))
 		{
 			Died();
 		}
 
-		if (RectCollisionCheck({m_PlayerPos}, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, { m_ClosestScissorPos.x - 100 + m_Scissors.width *0.85f, m_ClosestScissorPos.y + (m_Scissors.height / 2) - 260 }, { m_PlayerCharacter.width * 0.1f + 4, 260 })) {
-			
-			m_Score++;
-
-			PlaySound(m_ScorePointSound);
-		}
 	}
+	else {
+		DrawDeadUI();
+	}
+}
+	
+void DriftGame::DrawDeadUI()
+{
+	DrawText(std::to_string(m_Score).c_str(), m_ButtonPos.x + m_ButtonSize.x / 2 - MeasureText(std::to_string(m_Score).c_str(), 70) / 2, 100, 70, WHITE);
 
-	bool RectCollisionCheck(Vector2 Rect1Pos, Vector2 Rect1Size, Vector2 Rect2Pos, Vector2 Rect2Size) {
+	if (IsMouseHoveringRect(m_ButtonSize, m_ButtonPos)) {
 
-		//DrawRectangle(Rect1Pos.x,Rect1Pos.y,Rect1Size.x,Rect1Size.y, ColorAlpha(GREEN, 0.5f));
+		DrawRectangle(m_ButtonPos.x, m_ButtonPos.y, m_ButtonSize.x, m_ButtonSize.y, GRAY);
 
-		//DrawRectangle(Rect2Pos.x, Rect2Pos.y, Rect2Size.x, Rect2Size.y, ColorAlpha(VIOLET,0.5f));
+		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+				m_IsDead = false;
 
-		if (Rect1Pos.x > Rect2Pos.x && Rect1Pos.x + Rect1Size.x < Rect2Pos.x + Rect2Size.x) {
-			
-			if (Rect1Pos.y > Rect2Pos.y && Rect1Pos.y + Rect1Size.y < Rect2Pos.y + Rect2Size.y) {
-				return true;
+				m_Score = 0;
+
+				m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - (m_Scissors.height / 2) * .75f };
+
+				m_ScissorsPosTwo = { m_ScissorsPos.x + GetScreenWidth() / 3 + (m_Scissors.width * 0.75f) , m_ScissorsPos.y };
+
+				m_ScissorsPosThree = { m_ScissorsPos.x + ((GetScreenWidth() / 3) + (m_Scissors.width * 0.75f)) * 2 , m_ScissorsPos.y };
+
+				m_ScissorsPos.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
+
+				m_ScissorsPosTwo.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
+
+				m_ScissorsPosThree.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
+
+				m_PlayerPos = { 100 , (float)GetScreenHeight() / 2 };
 			}
-			else
-			{
-				return false;
-			}
-		}
-
-		return false;
+	}
+	else {
+		DrawRectangle(m_ButtonPos.x, m_ButtonPos.y, m_ButtonSize.x, m_ButtonSize.y, WHITE);
 	}
 
-	void DrawBackground() {
 
-		m_BackgroundX -= GetFrameTime() * 100;
+	DrawText("Play Again", m_ButtonPos.x + (m_ButtonSize.x / 2 - MeasureText("Play Again",32) / 2), m_ButtonPos.y + 10, 32, BLACK);
+}
 
-		if (m_BackgroundX <= -m_Background.width) {
-			m_BackgroundX = 0;
-		}
+void DriftGame::Died() 
+{
+	m_IsDead = true;
+}
 
-		DrawTexture(m_Background , m_BackgroundX , 0 , WHITE);
+void DriftGame::Score()
+{
+	DrawText(std::to_string(m_Score).c_str(), GetScreenWidth() / 2 + MeasureText(std::to_string(m_Score).c_str(), 50) / 2, 100, 50, WHITE);
 
-		DrawTexture(m_Background, m_BackgroundX + m_Background.width, 0, WHITE);
+	if (m_PlayerPos.y <= 0 || m_PlayerPos.y >= GetScreenHeight()) {
+		Died();
 	}
 
-	void DrawScissors(Vector2& pos) {
-
-		pos.x -= GetFrameTime() * m_ScissorsScrollSpeed;
-
-		if (pos.x + (m_Scissors.width * 0.85f) <= 0) {
-			pos.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
-			pos.x += GetScreenWidth() * 1.5f;
-		}
-
-
-		DrawTextureEx(m_Scissors, pos,
-			0, 0.75f, WHITE);
+	if (m_ScissorsPos.x - m_PlayerPos.x < 100 && m_ScissorsPos.x - m_PlayerPos.x + m_Scissors.width > 0) {
+		m_ClosestScissorPos = m_ScissorsPos;
+	}
+	else if (m_ScissorsPosTwo.x - m_PlayerPos.x < 100 && m_ScissorsPosTwo.x - m_PlayerPos.x + m_Scissors.width > 0) {
+		m_ClosestScissorPos = m_ScissorsPosTwo;
+	}
+	else if (m_ScissorsPosThree.x - m_PlayerPos.x < 100 && m_ScissorsPosThree.x - m_PlayerPos.x + m_Scissors.width > 0) {
+		m_ClosestScissorPos = m_ScissorsPosThree;
+	}
+	else {
+		return;
 	}
 
-	void DrawPlayer() {
+	if (RectCollisionCheck(m_PlayerPos, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, m_ClosestScissorPos, { (float)m_Scissors.width * 0.85f , ((m_Scissors.height * 0.85f) / 2) - 160 })
+		|| RectCollisionCheck(m_PlayerPos, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, { m_ClosestScissorPos.x, m_ClosestScissorPos.y + m_Scissors.height / 2 - 30 }, { (float)m_Scissors.width * 0.85f , ((m_Scissors.height * 0.85f) / 2) }))
+	{
+		Died();
+	}
 
-		// Swaying
-		m_PlayerRot += sine / 2;
-		m_PlayerPos.y += sine / 4;
+	if (RectCollisionCheck({m_PlayerPos}, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, { m_ClosestScissorPos.x - 100 + m_Scissors.width *0.85f, m_ClosestScissorPos.y + (m_Scissors.height / 2) - 260 }, { m_PlayerCharacter.width * 0.1f + 4, 260 })) 
+	{	
+		m_Score++;
+	}
+}
 
-		// Gravity
-		dy += m_Gravity * GetFrameTime();
-
-		// Jump
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE)) {
-			PlaySound(m_JumpSound);
-			dy = -m_Gravity + 1.5f;
+bool DriftGame::RectCollisionCheck(Vector2 Rect1Pos, Vector2 Rect1Size, Vector2 Rect2Pos, Vector2 Rect2Size) 
+{
+	if (Rect1Pos.x > Rect2Pos.x && Rect1Pos.x + Rect1Size.x < Rect2Pos.x + Rect2Size.x) 
+	{	
+		if (Rect1Pos.y > Rect2Pos.y && Rect1Pos.y + Rect1Size.y < Rect2Pos.y + Rect2Size.y) {
+			return true;
 		}
+		else
+		{
+			return false;
+		}
+	}
+
+	return false;
+}
+
+void DriftGame::DrawBackground() 
+{
+	m_BackgroundX -= GetFrameTime() * 100;
+
+	if (m_BackgroundX <= -m_Background.width) {
+		m_BackgroundX = 0;
+	}
+
+	DrawTexture(m_Background , m_BackgroundX , 0 , WHITE);
+
+	DrawTexture(m_Background, m_BackgroundX + m_Background.width, 0, WHITE);
+}
+
+void DriftGame::DrawScissors(Vector2& pos) const 
+{
+	pos.x -= GetFrameTime() * m_ScissorsScrollSpeed;
+
+	if (pos.x + (m_Scissors.width * 0.85f) <= 0) {
+		pos.y += GetRandomValue(-m_ScissorMaxDist, m_ScissorMaxDist);
+		pos.x += GetScreenWidth() * 1.5f;
+	}
+
+	DrawTextureEx(m_Scissors, pos, 0, 0.75f, WHITE);
+}
+
+void DriftGame::DrawPlayer() 
+{
+	// Swaying
+	m_PlayerRot += sine / 2;
+	m_PlayerPos.y += sine / 4;
+
+	// Gravity
+	dy += m_Gravity * GetFrameTime();
+
+	// Jump
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsKeyPressed(KEY_SPACE)) {
+		dy = -m_Gravity + 1.5f;
+	}
 		
-		m_PlayerPos.y += dy;
+	m_PlayerPos.y += dy;
 
-		// Draw Player
-		DrawTextureEx (m_PlayerCharacter , m_PlayerPos , m_PlayerRot , .1f , WHITE);
+	// Draw Player
+	DrawTextureEx (m_PlayerCharacter , m_PlayerPos , m_PlayerRot , .1f , WHITE);
+}
+
+void DriftGame::UpdateSine() 
+{
+	if (sine >= 1) {
+		m_SineUp = false;
+	}
+	else if (sine <= -1) {
+		m_SineUp = true;
 	}
 
-	void UpdateSine() {
+	if (m_SineUp) {
+		sine += GetFrameTime() * 3;
+	}
+	else {
+		sine -= GetFrameTime() * 3;
+	}
+}
 
-		if (sine >= 1) {
-			m_SineUp = false;
-		}
-		else if (sine <= -1) {
-			m_SineUp = true;
-		}
+bool DriftGame::IsMouseHoveringRect(Vector2& rectPos, Vector2& rectSize) 
+{
+	float rectYmax = rectPos.y + rectSize.y;
+	float rectYmin = rectPos.y;
 
-		if (m_SineUp) {
-			sine += GetFrameTime() * 3;
+	float rectXmax = rectPos.x + rectSize.x;
+	float rectXmin = rectPos.x;
+
+	Vector2 mousePos = GetMousePosition();
+
+	if (mousePos.y > rectYmin && mousePos.y < rectYmax) {
+
+		if (mousePos.x > rectXmin && mousePos.x < rectXmax) {
+			return true;
 		}
 		else {
-			sine -= GetFrameTime() * 3;
+			return false;
 		}
 	}
-
-	void LoadTextures() {
-
-		m_PlayerCharacter = LoadTexture("resources/Glider.png");
-		m_Scissors = LoadTexture("resources/Scissors.png");
-		m_Background = LoadTexture("resources/Background.png");
-
-		m_DeathSound = LoadSound("resources/Died.wav");
-		m_JumpSound = LoadSound("resources/Jump.wav");
-		m_ScorePointSound = LoadSound("resources/ScorePoint.wav");
+	else
+	{
+		return false;
 	}
+}
 
-	void UnloadTextures() {
-		UnloadTexture(m_PlayerCharacter);
-		UnloadTexture(m_Scissors);
-		UnloadTexture(m_Background);
+void DriftGame::LoadTextures() {
 
-		UnloadSound(m_DeathSound);
-		UnloadSound(m_JumpSound);
-		UnloadSound(m_ScorePointSound);
-	}
+	m_PlayerCharacter = LoadTexture("resources/Glider.png");
+	m_Scissors = LoadTexture("resources/Scissors.png");
+	m_Background = LoadTexture("resources/Background.png");
+}
 
-private:
-
-	Texture m_PlayerCharacter;
-	Texture m_Scissors;
-	Texture m_Background;
-
-	Sound m_DeathSound;
-	Sound m_JumpSound;
-	Sound m_ScorePointSound;
-
-	float m_BackgroundX = 0;
-
-	Vector2 m_PlayerPos{ 100 , (float)GetScreenHeight() / 2};
-	float m_PlayerRot = -10;
-
-	float dy = 0;
-
-	float sine = 0;
-	bool m_SineUp = true;
-
-	Vector2 m_ScissorsPos{};
-	Vector2 m_ScissorsPosTwo{};
-	Vector2 m_ScissorsPosThree{};
-
-	const int m_ScissorMaxDist = 30;
-
-	const int m_ScissorsScrollSpeed = 200;
-
-	Vector2 m_ClosestScissorPos{};
-
-	float m_Gravity = 4.5f;
-
-	int m_Score = 0;
-};
+void DriftGame::UnloadTextures() const 
+{
+	UnloadTexture(m_PlayerCharacter);
+	UnloadTexture(m_Scissors);
+	UnloadTexture(m_Background);
+}

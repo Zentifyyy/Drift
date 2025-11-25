@@ -1,5 +1,5 @@
-#include "mainmenu.cpp"
-#include "driftgame.cpp"
+#include "mainmenu.h"
+#include "driftgame.h"
 
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
@@ -17,12 +17,14 @@ int main()
 	#if defined(PLATFORM_WEB)
 		emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
 	#else
-	SetTargetFPS(60);
 
-	while (!closeGame)
-	{
-		UpdateDrawFrame();
-	}
+		SetTargetFPS(60);
+
+		while (!closeGame)
+		{
+			UpdateDrawFrame();
+		}
+
 	#endif
 
 	CloseWindow();
