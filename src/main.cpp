@@ -1,40 +1,52 @@
 #include "mainmenu.cpp"
 #include "driftgame.cpp"
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
+void UpdateDrawFrame();
+
+MainMenu menu({900,600});
+DriftGame game;
+
+bool closeGame = false;
+
 int main()
 {
-	MainMenu menu;
-	DriftGame game;
-
-	bool closeGame = false;
-
-	SearchAndSetResourceDir("resources");
-	
-	Sound BackgroundMusic = LoadSound("BackgroundMusic.wav");
+	#if defined(PLATFORM_WEB)
+		emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
+	#else
+	SetTargetFPS(60);
 
 	while (!closeGame)
 	{
-		if (menu.CloseGame || WindowShouldClose()) {
-			closeGame = true;
-		}
+		UpdateDrawFrame();
+	}
+	#endif
 
-		if (!IsSoundPlaying(BackgroundMusic)) {
-			PlaySound(BackgroundMusic);
-		}
+	CloseWindow();
+}
 
-		BeginDrawing();
-		
-		if (menu.IsMenuActive)
-		{
-			menu.Update();
-		}
-		else
-		{
-			game.Update();
-		}
 
-		EndDrawing();
+void UpdateDrawFrame(void)
+{
+	BeginDrawing();
+
+	if (menu.CloseGame || WindowShouldClose()) {
+		closeGame = true;
 	}
 
-	UnloadSound(BackgroundMusic);
+	BeginDrawing();
+
+	if (menu.IsMenuActive)
+	{
+		menu.Update();
+	}
+	else
+	{
+		game.Update();
+	}
+
+	EndDrawing();
 }

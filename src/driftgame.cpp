@@ -1,5 +1,4 @@
 #include <raylib.h>
-#include <resource_dir.h>
 #include <iostream>
 #include <string>
 
@@ -198,15 +197,14 @@ private:
 	}
 
 	void LoadTextures() {
-		SearchAndSetResourceDir("resources");
 
-		m_PlayerCharacter = LoadTexture("Glider.png");
-		m_Scissors = LoadTexture("Scissors.png");
-		m_Background = LoadTexture("Background.png");
+		m_PlayerCharacter = LoadTexture("resources/Glider.png");
+		m_Scissors = LoadTexture("resources/Scissors.png");
+		m_Background = LoadTexture("resources/Background.png");
 
-		m_DeathSound = LoadSound("Died.wav");
-		m_JumpSound = LoadSound("Jump.wav");
-		m_ScorePointSound = LoadSound("ScorePoint.wav");
+		m_DeathSound = LoadSound("resources/Died.wav");
+		m_JumpSound = LoadSound("resources/Jump.wav");
+		m_ScorePointSound = LoadSound("resources/ScorePoint.wav");
 	}
 
 	void UnloadTextures() {

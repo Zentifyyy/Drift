@@ -1,16 +1,15 @@
 #include <raylib.h>
-#include <resource_dir.h>
 #include <iostream>
 
 class MainMenu{
 
 public: // Constructer + Destructer
 
-	MainMenu() { // Initialise Window
+	MainMenu(Vector2 windowSize) { // Initialise Window
 
 		SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
-		InitWindow(m_WindowSize.x, m_WindowSize.y, "Drift");
+		InitWindow(windowSize.x, windowSize.y, "Drift");
 
 		m_PlayRectPos = { (GetScreenWidth() - m_ButtonSize.x) / 2, (float)(GetScreenHeight() / 2) - 12.5f };
 
@@ -134,11 +133,9 @@ private: // Private Functions
 	
 	void LoadTextures() {
 
-		SearchAndSetResourceDir("resources");
-
-		m_Glider = LoadTexture("Glider.png");
+		m_Glider = LoadTexture("resources/Glider.png");
 		
-		m_Background = LoadTexture("Background.png");
+		m_Background = LoadTexture("resources/Background.png");
 	}
 
 	void UnloadTextures() {
@@ -155,8 +152,6 @@ private: // Private Variables
 
 	Texture m_Glider;
 	Texture m_Background;
-
-	Vector2 m_WindowSize{ 900 , 600 };
 
 	Vector2 m_ButtonSize{ 200, 50 };
 
