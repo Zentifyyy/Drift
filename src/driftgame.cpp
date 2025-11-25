@@ -3,8 +3,6 @@
 
 DriftGame::DriftGame() {
 
-		InitAudioDevice();
-
 		LoadTextures();
 
 		m_ScissorsPos = { (float)GetScreenWidth(), (float)GetScreenHeight() / 2 - ( m_Scissors.height / 2) * .75f };
@@ -85,7 +83,6 @@ void DriftGame::DrawDeadUI()
 	else {
 		DrawRectangle(m_ButtonPos.x, m_ButtonPos.y, m_ButtonSize.x, m_ButtonSize.y, WHITE);
 	}
-
 
 	DrawText("Play Again", m_ButtonPos.x + (m_ButtonSize.x / 2 - MeasureText("Play Again",32) / 2), m_ButtonPos.y + 10, 32, BLACK);
 }

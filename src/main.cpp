@@ -10,8 +10,6 @@ void UpdateDrawFrame();
 MainMenu menu({900,600});
 DriftGame game;
 
-bool closeGame = false;
-
 int main()
 {
 	#if defined(PLATFORM_WEB)
@@ -20,7 +18,7 @@ int main()
 
 		SetTargetFPS(60);
 
-		while (!closeGame)
+		while (!WindowShouldClose())
 		{
 			UpdateDrawFrame();
 		}
@@ -33,12 +31,6 @@ int main()
 
 void UpdateDrawFrame(void)
 {
-	BeginDrawing();
-
-	if (menu.CloseGame || WindowShouldClose()) {
-		closeGame = true;
-	}
-
 	BeginDrawing();
 
 	if (menu.IsMenuActive)

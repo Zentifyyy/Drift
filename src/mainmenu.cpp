@@ -9,8 +9,6 @@ MainMenu::MainMenu(Vector2 windowSize) {
 
 	m_PlayRectPos = { (GetScreenWidth() - m_ButtonSize.x) / 2, (float)(GetScreenHeight() / 2) - 12.5f };
 
-	m_ExitRectPos = { (GetScreenWidth() - m_ButtonSize.x) / 2, (float)(GetScreenHeight() / 2) + 25 + m_ButtonSize.y };
-
 	m_PlayerPos =  { 0, 185 };
 		
 	LoadTextures();
@@ -32,22 +30,6 @@ void MainMenu::Update() {
 		
 	DrawText("Drift", (GetScreenWidth() - MeasureText("Drift", 50)) / 2, 100, 50, WHITE);
 	DrawPlayer();
-
-	DrawRectangle(m_ExitRectPos.x, m_ExitRectPos.y, m_ButtonSize.x, m_ButtonSize.y, m_ExitButtonCol);
-	DrawText("Exit", (GetScreenWidth() - MeasureText("Exit", 25)) / 2, (GetScreenHeight() / 2) + 90, 25, BLACK);
-
-	if (IsMouseHoveringRect(m_ExitRectPos, m_ButtonSize)) {
-			
-		m_ExitButtonCol = LIGHTGRAY;
-
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-			m_ExitButtonCol = GRAY;
-			CloseGame = true;
-		}
-	}
-	else {
-		m_ExitButtonCol = WHITE;
-	}
 
 	DrawRectangle( m_PlayRectPos.x, m_PlayRectPos.y, m_ButtonSize.x , m_ButtonSize.y, m_PlayButtonCol );
 	DrawText("Play", (GetScreenWidth() - MeasureText("Play", 25)) / 2, (GetScreenHeight() / 2), 25, BLACK);
