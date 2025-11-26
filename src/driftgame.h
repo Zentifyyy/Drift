@@ -64,4 +64,5 @@ private:
 	float m_Gravity = 4.5f;
 
 	int m_Score = 0;
+	bool m_Scoring = false;
 };

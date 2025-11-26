@@ -13,6 +13,7 @@ DriftGame game;
 int main()
 {
 	#if defined(PLATFORM_WEB)
+		SetTargetFPS(60);
 		emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
 	#else
 

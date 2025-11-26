@@ -102,12 +102,15 @@ void DriftGame::Score()
 
 	if (m_ScissorsPos.x - m_PlayerPos.x < 100 && m_ScissorsPos.x - m_PlayerPos.x + m_Scissors.width > 0) {
 		m_ClosestScissorPos = m_ScissorsPos;
+		m_Scoring = false;
 	}
 	else if (m_ScissorsPosTwo.x - m_PlayerPos.x < 100 && m_ScissorsPosTwo.x - m_PlayerPos.x + m_Scissors.width > 0) {
 		m_ClosestScissorPos = m_ScissorsPosTwo;
+		m_Scoring = false;
 	}
 	else if (m_ScissorsPosThree.x - m_PlayerPos.x < 100 && m_ScissorsPosThree.x - m_PlayerPos.x + m_Scissors.width > 0) {
 		m_ClosestScissorPos = m_ScissorsPosThree;
+		m_Scoring = false;
 	}
 	else {
 		return;
@@ -119,8 +122,10 @@ void DriftGame::Score()
 		Died();
 	}
 
+	if(!m_Scoring)
 	if (RectCollisionCheck({m_PlayerPos}, { (float)m_PlayerCharacter.width * 0.1f, (float)m_PlayerCharacter.height * 0.1f }, { m_ClosestScissorPos.x - 100 + m_Scissors.width *0.85f, m_ClosestScissorPos.y + (m_Scissors.height / 2) - 260 }, { m_PlayerCharacter.width * 0.1f + 4, 260 })) 
 	{	
+		m_Scoring = true;
 		m_Score++;
 	}
 }
