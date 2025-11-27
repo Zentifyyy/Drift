@@ -12,16 +12,32 @@ Drift is a Flappy bird game, made in roughly a day, using [Raylib](https://githu
 
 - #### For binaries, check out the [GitHub releases page](https://github.com/Zentifyyy/Drift/releases/tag/Release-v1.0-r). 
 
-Otherwise follow these instructions. 
+## Visual Studio 2022
 
 - These instructions are [Visual Studio 2022](https://visualstudio.microsoft.com) specific, which is recommended but not strictly necessary, to build for other platforms, check out the [Raylib QuickStart Repository](https://github.com/raylib-extras/raylib-quickstart). 
 
 - Clone the repository. 
 
 ``` 
-git clone https://github.com/Zentifyyy/Drift.git 
+git clone -b web https://github.com/Zentifyyy/Drift.git
 ``` 
 
 - Then, run ```scripts/build-VisualStudio2022.bat``` to generate a Visual Studio solution file for the main project.  
 
 - Then open up the ```Drift.sln``` in the base directory and you are good to go. 
+
+## Emscripten (Web)
+
+- Ensure you have Emscripten and raylib installed and up to date.
+
+- Clone the repository. 
+
+``` 
+git clone -b web https://github.com/Zentifyyy/Drift.git 
+``` 
+
+- Then, open ```scripts/web-build-script.txt``` and copy the script, this script is in a text file for ease of editing.
+
+- Then run the command in the base directory and copy the ```.html, .wasm, .js, .data``` files into their own directory.
+
+- You can then run a python server by running ```python -m http.server``` in your command line to access the files in your browser.
