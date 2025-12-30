@@ -1,8 +1,8 @@
 #include "mainmenu.h"
 #include <raylib.h>
 
-MainMenu::MainMenu(Vector2 windowSize) {
-
+MainMenu::MainMenu(Vector2 windowSize) 
+{
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
 	InitWindow(windowSize.x, windowSize.y, "Drift");
@@ -14,15 +14,15 @@ MainMenu::MainMenu(Vector2 windowSize) {
 	LoadTextures();
 };
 
-MainMenu::~MainMenu() { // Close Window
-
+MainMenu::~MainMenu()  // Close Window
+{
 	UnloadTextures();
 
 	CloseWindow();
 }
 
-void MainMenu::Update() {
-
+void MainMenu::Update() 
+{
 	ClearBackground(WHITE);
 	DrawTexture(m_Background,0,0,WHITE);
 
@@ -34,8 +34,8 @@ void MainMenu::Update() {
 	DrawRectangle( m_PlayRectPos.x, m_PlayRectPos.y, m_ButtonSize.x , m_ButtonSize.y, m_PlayButtonCol );
 	DrawText("Play", (GetScreenWidth() - MeasureText("Play", 25)) / 2, (GetScreenHeight() / 2), 25, BLACK);
 	
-	if (IsMouseHoveringRect(m_PlayRectPos, m_ButtonSize)) {
-
+	if (IsMouseHoveringRect(m_PlayRectPos, m_ButtonSize)) 
+	{
 		m_PlayButtonCol = LIGHTGRAY;
 		
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -43,11 +43,10 @@ void MainMenu::Update() {
 			IsMenuActive = false;
 		}
 	}
-	else {
+	else
 		m_PlayButtonCol = WHITE;
-	}
 	
-	}
+}
 
 void MainMenu::DrawPlayer() {
 
@@ -56,21 +55,21 @@ void MainMenu::DrawPlayer() {
 
 	m_PlayerPos.x += GetFrameTime() * 100;
 
-	if (m_PlayerPos.x >= GetScreenWidth()) {
+	if (m_PlayerPos.x >= GetScreenWidth())
 		m_PlayerPos.x = -m_Glider.width * m_PlayerScale;
-	}
 
 	DrawTextureEx( m_Glider , m_PlayerPos , m_PlayerRot , m_PlayerScale , WHITE);
 }
 	
-void MainMenu::LoadTextures() {
-
+void MainMenu::LoadTextures()
+{
 	m_Glider = LoadTexture("resources/Glider.png");
 		
 	m_Background = LoadTexture("resources/Background.png");
 }
 
-void MainMenu::UnloadTextures() const {
+void MainMenu::UnloadTextures() const 
+{
 	UnloadTexture(m_Glider);
 	UnloadTexture(m_Background);
 }
